@@ -184,7 +184,7 @@ export function LoginPage() {
             <LogoMark size={32} />
 
             <span className="text-base font-semibold tracking-tight text-[#0d1117]">
-              Expense Management
+              Gestión de gastos corporativos
             </span>
           </div>
 
