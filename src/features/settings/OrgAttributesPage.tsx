@@ -51,7 +51,7 @@ export function OrgAttributesPage() {
       await deleteAttribute.mutateAsync(pendingDelete.id);
       setPendingDelete(null);
     } catch (error) {
-// La API devuelve `org_attribute_in_use` cuando el atributo todavía está siendo utilizado por un usuario o una regla.
+      // La API devuelve `org_attribute_in_use` cuando el atributo todavía está siendo utilizado por un usuario o una regla.
       setActionError(toMessage(error));
       setPendingDelete(null);
     }

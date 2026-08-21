@@ -20,7 +20,7 @@ export function useReports(params: ReportListParams = {}) {
         {
           role: params.role,
           status: params.status,
-// El backend interpreta este indicador como un valor de texto verdadero.
+          // El backend interpreta este indicador como un valor de texto verdadero.
           pendingMyApproval: params.pendingMyApproval ? 'true' : undefined,
           page: params.page,
           pageSize: params.pageSize,
@@ -84,7 +84,7 @@ export function useReportWorkflow(reportId: string) {
       void queryClient.invalidateQueries({ queryKey: expenseKeys.all });
     },
     onError: () => {
-// Una transición rechazada suele indicar que el estado almacenado está desactualizado.
+      // Una transición rechazada suele indicar que el estado almacenado está desactualizado.
       void queryClient.invalidateQueries({ queryKey: reportKeys.detail(reportId) });
     },
   });

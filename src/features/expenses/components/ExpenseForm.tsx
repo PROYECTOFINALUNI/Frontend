@@ -122,7 +122,7 @@ export function ExpenseForm({
 
   const values = watch();
 
-// Inicializa los campos de la categoría seleccionada y descarta los valores de la categoría anterior.
+  // Inicializa los campos de la categoría seleccionada y descarta los valores de la categoría anterior.
   useEffect(() => {
     setValue(
       'customFields',
@@ -139,7 +139,7 @@ export function ExpenseForm({
   const [useCustomRate, setUseCustomRate] = useState(
     () => !TAX_PRESETS.some((preset) => preset.value === defaults.taxRateBps)
   );
-// Al cambiar a una moneda sin decimales, el importe introducido puede dejar de ser válido.
+  // Al cambiar a una moneda sin decimales, el importe introducido puede dejar de ser válido.
   useEffect(() => {
     if (values.amountDecimal && !isValidDecimalString(values.amountDecimal, values.currency)) {
       setError('amountDecimal', {
@@ -149,7 +149,7 @@ export function ExpenseForm({
     }
   }, [values.currency, values.amountDecimal, setError]);
 
-// Calcula una previsualización local inmediata utilizando la misma lógica de cálculo que el backend.
+  // Calcula una previsualización local inmediata utilizando la misma lógica de cálculo que el backend.
   const local: LocalCalculation | null = useMemo(() => {
     if (!values.amountDecimal || !isValidDecimalString(values.amountDecimal, values.currency)) {
       return null;
@@ -176,7 +176,7 @@ export function ExpenseForm({
     }));
   }, [local, warningRulesQuery.data, values.currency, values.categoryId]);
 
-// La previsualización del backend se retrasa ligeramente para evitar una petición por cada pulsación.
+  // La previsualización del backend se retrasa ligeramente para evitar una petición por cada pulsación.
   const previewBody: ExpenseWrite | null = local
     ? {
         reportId,
@@ -186,7 +186,7 @@ export function ExpenseForm({
         currency: values.currency,
         amountDecimal: values.amountDecimal,
         tax: { rateBps: values.taxRateBps, included: values.taxIncluded },
-// La previsualización solo calcula el gasto; los campos personalizados no afectan a avisos ni aprobaciones.
+        // La previsualización solo calcula el gasto; los campos personalizados no afectan a avisos ni aprobaciones.
         customFields: [],
       }
     : null;
@@ -213,7 +213,7 @@ export function ExpenseForm({
         reportId,
         merchant: formValues.merchant.trim(),
         expenseDate: formValues.expenseDate,
-// La API requiere enviar la categoría, usando null cuando no hay ninguna seleccionada.
+        // La API requiere enviar la categoría, usando null cuando no hay ninguna seleccionada.
         categoryId: formValues.categoryId || null,
         currency: formValues.currency,
         amountDecimal: formValues.amountDecimal,
@@ -222,7 +222,7 @@ export function ExpenseForm({
       });
     } catch (error) {
       const { fieldErrors, formError: message } = extractFormErrors(error);
-// Adapta las rutas de la API en camelCase a los nombres de los campos del formulario.
+      // Adapta las rutas de la API en camelCase a los nombres de los campos del formulario.
       const mapping: Record<string, keyof ExpenseFormValues> = {
         merchant: 'merchant',
         expenseDate: 'expenseDate',
@@ -234,7 +234,7 @@ export function ExpenseForm({
       };
 
       for (const [path, fieldMessage] of Object.entries(fieldErrors)) {
-// El error de un campo personalizado ya incluye directamente el identificador de su campo.
+        // El error de un campo personalizado ya incluye directamente el identificador de su campo.
         if (path.startsWith('customFields.')) {
           setError(path as `customFields.${string}`, { type: 'server', message: fieldMessage });
           continue;

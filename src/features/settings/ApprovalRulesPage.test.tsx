@@ -6,13 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { renderWithProviders } from '@/shared/test/renderWithProviders';
 import { server } from '@/shared/test/msw/server';
 import { API } from '@/shared/test/msw/handlers';
-import {
-  itDepartment,
-  makeApprovalRule,
-  manager,
-  paginate,
-  spain,
-} from '@/shared/test/fixtures';
+import { itDepartment, makeApprovalRule, manager, paginate, spain } from '@/shared/test/fixtures';
 
 import { ApprovalRulesPage } from './ApprovalRulesPage';
 
@@ -38,7 +32,7 @@ describe('ApprovalRulesPage', () => {
 
     expect(row.getByText('All categories')).toBeInTheDocument();
     expect(row.getByText('above EUR 0.00')).toBeInTheDocument();
-   // El solicitante es de España e IT; los aprobadores deben ser de España, IT y tener el cargo de Manager.
+    // El solicitante es de España e IT; los aprobadores deben ser de España, IT y tener el cargo de Manager.
     expect(row.getByText('Spain · IT · Any')).toBeInTheDocument();
     expect(row.getByText('Spain · IT · Manager')).toBeInTheDocument();
     expect(row.getByText('2 matching people')).toBeInTheDocument();

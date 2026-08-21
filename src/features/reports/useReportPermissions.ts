@@ -11,7 +11,7 @@ export function useReportPermissions(report: ReportDetail) {
     .filter((step) => step.status === 'PENDING')
     .sort((left, right) => left.stepOrder - right.stepOrder)[0];
 
-// Cualquier usuario incluido en el grupo de aprobadores del paso puede tomar la decisión.
+  // Cualquier usuario incluido en el grupo de aprobadores del paso puede tomar la decisión.
   const isCurrentApprover =
     report.status === 'SUBMITTED' &&
     currentStep !== undefined &&

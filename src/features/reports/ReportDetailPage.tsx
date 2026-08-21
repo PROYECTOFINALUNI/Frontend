@@ -45,7 +45,7 @@ function ReportDetailView({ report }: { report: ReportDetail }) {
   const [confirmDeleteReport, setConfirmDeleteReport] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
-// Agrupa los avisos de todos los gastos en un resumen del informe.
+  // Agrupa los avisos de todos los gastos en un resumen del informe.
   const allWarnings: DisplayWarning[] = report.expenses.flatMap((expense) =>
     expense.warnings.map((warning) => ({
       key: warning.id,

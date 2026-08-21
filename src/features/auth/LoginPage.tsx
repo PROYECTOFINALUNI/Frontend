@@ -9,13 +9,11 @@ import { extractFormErrors } from '@/shared/api/errors';
 import { loginSchema, type LoginFormValues } from '@/shared/validation/schemas';
 import { useAuth } from './useAuth';
 
-
 const FEATURES = [
   'Cada gasto bajo control, desde el primer momento',
   'Aprobaciones más rápidas con reglas inteligentes',
   'La estructura de tu organización, conectada a cada decisión',
 ];
-
 
 export function LoginPage() {
   const { login, isAuthenticated } = useAuth();
@@ -91,8 +89,7 @@ export function LoginPage() {
           className="absolute inset-0 opacity-[0.07]"
           aria-hidden="true"
           style={{
-            backgroundImage:
-              'radial-gradient(circle, #ffffff 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
             backgroundSize: '28px 28px',
           }}
         />
@@ -115,13 +112,9 @@ export function LoginPage() {
             <div className="mb-10 w-full rounded-2xl border border-white/10 bg-white/[0.06] p-6 backdrop-blur-sm transition-all duration-300 ease-out hover:scale-[1.02] hover:border-white/20 hover:bg-white/[0.09] hover:shadow-[0_12px_32px_rgba(0,0,0,0.16)]">
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <p className="mb-0.5 text-xs font-medium text-indigo-300">
-                    Gastos este mes
-                  </p>
+                  <p className="mb-0.5 text-xs font-medium text-indigo-300">Gastos este mes</p>
 
-                  <p className="text-[1.75rem] font-bold tracking-[-0.03em] text-white">
-                    € 48,230
-                  </p>
+                  <p className="text-[1.75rem] font-bold tracking-[-0.03em] text-white">€ 48,230</p>
                 </div>
 
                 <div className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-[#6ee7b7]">
@@ -131,26 +124,19 @@ export function LoginPage() {
 
               {/* Gráfico */}
               <div className="flex h-12 items-end gap-1.5">
-                {[40, 65, 50, 80, 55, 90, 70, 85, 60, 75, 95, 68].map(
-                  (height, index) => (
-                    <div
-                      key={index}
-                      className="flex-1 rounded-sm"
-                      style={{
-                        height: `${height}%`,
-                        background:
-                          index === 11
-                            ? 'rgba(129,140,248,0.9)'
-                            : 'rgba(255,255,255,0.15)',
-                      }}
-                    />
-                  ),
-                )}
+                {[40, 65, 50, 80, 55, 90, 70, 85, 60, 75, 95, 68].map((height, index) => (
+                  <div
+                    key={index}
+                    className="flex-1 rounded-sm"
+                    style={{
+                      height: `${height}%`,
+                      background: index === 11 ? 'rgba(129,140,248,0.9)' : 'rgba(255,255,255,0.15)',
+                    }}
+                  />
+                ))}
               </div>
 
-              <p className="mt-3 text-xs text-indigo-300">
-                Ene — Dic 2026
-              </p>
+              <p className="mt-3 text-xs text-indigo-300">Ene — Dic 2026</p>
             </div>
 
             <h2 className="mb-4 text-[1.875rem] font-bold leading-tight tracking-tight text-white">
@@ -158,20 +144,16 @@ export function LoginPage() {
             </h2>
 
             <p className="mb-8 text-sm leading-relaxed text-indigo-200">
-              Convierte procesos complejos en un flujo simple, trazable y adaptado a la forma en que trabaja tu empresa.
+              Convierte procesos complejos en un flujo simple, trazable y adaptado a la forma en que
+              trabaja tu empresa.
             </p>
 
             <ul className="space-y-3">
               {FEATURES.map((feature) => (
-                <li
-                  key={feature}
-                  className="flex items-center gap-3"
-                >
+                <li key={feature} className="flex items-center gap-3">
                   <CheckIcon />
 
-                  <span className="text-sm text-indigo-100">
-                    {feature}
-                  </span>
+                  <span className="text-sm text-indigo-100">{feature}</span>
                 </li>
               ))}
             </ul>
@@ -181,20 +163,13 @@ export function LoginPage() {
         {/* Información parte de abajo */}
         <div className="relative z-10 px-10 pb-8">
           <div className="flex items-center gap-4">
-            {['Gastos bajo control', 'Flujos automatizados', 'Visibilidad completa'].map(
-              (text) => (
-                <div
-                  key={text}
-                  className="flex items-center gap-1.5"
-                >
-                  <div className="size-1 rounded-full bg-[#818cf8]" />
+            {['Gastos bajo control', 'Flujos automatizados', 'Visibilidad completa'].map((text) => (
+              <div key={text} className="flex items-center gap-1.5">
+                <div className="size-1 rounded-full bg-[#818cf8]" />
 
-                  <span className="text-[11px] text-indigo-300">
-                    {text}
-                  </span>
-                </div>
-              ),
-            )}
+                <span className="text-[11px] text-indigo-300">{text}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -225,16 +200,8 @@ export function LoginPage() {
           </div>
 
           {/* Formulario */}
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            noValidate
-            className="space-y-4"
-          >
-            {formError && (
-              <AlertBanner tone="error">
-                {formError}
-              </AlertBanner>
-            )}
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
+            {formError && <AlertBanner tone="error">{formError}</AlertBanner>}
 
             <Input
               label="Correo electrónico"
@@ -342,7 +309,6 @@ export function LoginPage() {
   );
 }
 
-
 function LogoMark({ size = 36 }: { size?: number }) {
   return (
     <div
@@ -368,17 +334,11 @@ function LogoMark({ size = 36 }: { size?: number }) {
           strokeLinejoin="round"
         />
 
-        <circle
-          cx="17"
-          cy="6"
-          r="1.5"
-          fill="white"
-        />
+        <circle cx="17" cy="6" r="1.5" fill="white" />
       </svg>
     </div>
   );
 }
-
 
 function CheckIcon() {
   return (
@@ -388,13 +348,7 @@ function CheckIcon() {
       fill="none"
       aria-hidden="true"
     >
-      <circle
-        cx="12"
-        cy="12"
-        r="9"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
 
       <path
         d="m8.5 12 2.25 2.25L15.75 9"
@@ -407,15 +361,9 @@ function CheckIcon() {
   );
 }
 
-
 function ArrowRightIcon() {
   return (
-    <svg
-      className="size-[15px]"
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-    >
+    <svg className="size-[15px]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
         d="M5 12h14M13 6l6 6-6 6"
         stroke="currentColor"

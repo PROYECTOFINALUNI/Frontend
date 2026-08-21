@@ -18,7 +18,7 @@ export function DashboardPage() {
   const drafts = useReports({ role: 'owner', status: 'DRAFT' });
   const submitted = useReports({ role: 'owner', status: 'SUBMITTED' });
   const pendingApproval = useReports({ pendingMyApproval: true });
-// Los avisos están asociados a los gastos, por lo que se consultan desde los gastos en borrador del usuario.
+  // Los avisos están asociados a los gastos, por lo que se consultan desde los gastos en borrador del usuario.
   const draftExpenses = useExpenses({ status: 'DRAFT', pageSize: 100 });
 
   const flagged = (draftExpenses.data?.results ?? []).filter(

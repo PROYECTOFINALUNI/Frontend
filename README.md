@@ -12,15 +12,15 @@ El frontend constituye un proyecto independiente del backend y dispone de sus pr
 
 Para ejecutar el proyecto mediante contenedores es necesario disponer de:
 
-* Docker
-* Docker Compose
+- Docker
+- Docker Compose
 
 No es necesario instalar Node.js directamente en el equipo si se utiliza Docker.
 
 Para ejecutar el proyecto sin contenedores es necesario disponer de:
 
-* Node.js 22 o superior
-* npm
+- Node.js 22 o superior
+- npm
 
 Además, el backend debe encontrarse en ejecución para que el frontend pueda comunicarse con la API.
 
@@ -158,20 +158,20 @@ La aplicación permite trabajar con los principales elementos del sistema de ges
 
 Entre las funcionalidades disponibles se encuentran:
 
-* Inicio y cierre de sesión.
-* Consulta de la información del usuario autenticado.
-* Creación y consulta de informes de gastos.
-* Creación, modificación y consulta de gastos.
-* Visualización del estado de los informes.
-* Envío de informes para aprobación.
-* Aprobación, rechazo o delegación de informes por parte de los usuarios autorizados.
-* Consulta del historial y los eventos relacionados con un informe.
-* Gestión de categorías.
-* Gestión de usuarios.
-* Gestión de reglas de aviso.
-* Gestión de reglas de aprobación.
-* Gestión de atributos organizativos.
-* Configuración de campos personalizados asociados a categorías.
+- Inicio y cierre de sesión.
+- Consulta de la información del usuario autenticado.
+- Creación y consulta de informes de gastos.
+- Creación, modificación y consulta de gastos.
+- Visualización del estado de los informes.
+- Envío de informes para aprobación.
+- Aprobación, rechazo o delegación de informes por parte de los usuarios autorizados.
+- Consulta del historial y los eventos relacionados con un informe.
+- Gestión de categorías.
+- Gestión de usuarios.
+- Gestión de reglas de aviso.
+- Gestión de reglas de aprobación.
+- Gestión de atributos organizativos.
+- Configuración de campos personalizados asociados a categorías.
 
 Las funcionalidades visibles dependen del rol y de los permisos del usuario autenticado.
 
@@ -209,9 +209,9 @@ Cuando un usuario selecciona una categoría que contiene este tipo de campos, el
 
 Estos pueden ser, entre otros:
 
-* Campos de texto.
-* Campos numéricos.
-* Campos de tipo booleano.
+- Campos de texto.
+- Campos numéricos.
+- Campos de tipo booleano.
 
 La obligatoriedad y configuración de estos campos depende de la categoría seleccionada y de la configuración realizada desde la administración.
 
@@ -242,16 +242,16 @@ src/
 
 Las principales responsabilidades son:
 
-* `app/`: configuración general de la aplicación, rutas, proveedores y estructura principal.
-* `features/auth/`: inicio de sesión y gestión de la autenticación.
-* `features/expenses/`: gestión de los gastos.
-* `features/reports/`: gestión de informes y de su flujo de aprobación.
-* `features/approvals/`: funcionalidades destinadas a los usuarios encargados de aprobar informes.
-* `features/settings/`: pantallas de configuración y administración.
-* `shared/api/`: comunicación con la API del backend.
-* `shared/components/`: componentes reutilizables de la interfaz.
-* `shared/types/`: tipos compartidos de la aplicación.
-* `shared/validation/`: validación de formularios y datos.
+- `app/`: configuración general de la aplicación, rutas, proveedores y estructura principal.
+- `features/auth/`: inicio de sesión y gestión de la autenticación.
+- `features/expenses/`: gestión de los gastos.
+- `features/reports/`: gestión de informes y de su flujo de aprobación.
+- `features/approvals/`: funcionalidades destinadas a los usuarios encargados de aprobar informes.
+- `features/settings/`: pantallas de configuración y administración.
+- `shared/api/`: comunicación con la API del backend.
+- `shared/components/`: componentes reutilizables de la interfaz.
+- `shared/types/`: tipos compartidos de la aplicación.
+- `shared/validation/`: validación de formularios y datos.
 
 Esta organización permite separar las distintas funcionalidades del proyecto y reutilizar componentes y lógica común.
 
@@ -329,9 +329,9 @@ El frontend depende de que el backend esté correctamente configurado y accesibl
 
 En el entorno de desarrollo habitual:
 
-* Frontend: `http://localhost:3000`
-* Backend: `http://localhost:8000`
-* Administración de Django: `http://localhost:8000/admin/`
-* Swagger: `http://localhost:8000/api/docs/`
+- Frontend: `http://localhost:3000`
+- Backend: `http://localhost:8000`
+- Administración de Django: `http://localhost:8000/admin/`
+- Swagger: `http://localhost:8000/api/docs/`
 
 Por tanto, para utilizar la aplicación completa deben encontrarse en ejecución tanto el frontend como el backend.

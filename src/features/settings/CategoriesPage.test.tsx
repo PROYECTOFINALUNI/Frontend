@@ -66,11 +66,11 @@ describe('CategoriesPage', () => {
     renderWithProviders(<CategoriesPage />);
     const { dialog } = await openEditDialog();
 
-// El campo Nights no está en uso, por lo que puede editarse completamente.
+    // El campo Nights no está en uso, por lo que puede editarse completamente.
     expect(dialog.getByLabelText('Field 1 type')).toBeEnabled();
     expect(dialog.getByRole('button', { name: 'Remove field 1' })).toBeInTheDocument();
 
-// El campo Breakfast included está en uso, por lo que no puede cambiar de tipo y solo puede desactivarse.
+    // El campo Breakfast included está en uso, por lo que no puede cambiar de tipo y solo puede desactivarse.
     expect(dialog.getByLabelText('Field 2 type')).toBeDisabled();
     expect(dialog.queryByRole('button', { name: 'Remove field 2' })).not.toBeInTheDocument();
     expect(dialog.getByLabelText('Field 2 active')).toBeInTheDocument();

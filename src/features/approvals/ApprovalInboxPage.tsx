@@ -10,7 +10,7 @@ import { formatDateTime } from '@/shared/utils/dates';
 import { useReports } from '@/features/reports/api';
 
 export function ApprovalInboxPage() {
-// `pendingMyApproval` devuelve los informes pendientes de aprobación por el usuario actual.
+  // `pendingMyApproval` devuelve los informes pendientes de aprobación por el usuario actual.
   const pending = useReports({ pendingMyApproval: true });
   const assigned = useReports({ role: 'approver' });
 

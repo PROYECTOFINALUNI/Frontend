@@ -19,7 +19,7 @@ export function ReportListPage() {
   const query = useReports(filters);
 
   function update(patch: Partial<ReportListParams>) {
-// Al cambiar los filtros, se vuelve a la primera página para evitar resultados vacíos.
+    // Al cambiar los filtros, se vuelve a la primera página para evitar resultados vacíos.
     setFilters((current) => ({ ...current, ...patch, page: patch.page ?? 1 }));
   }
 

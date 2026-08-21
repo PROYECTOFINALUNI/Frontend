@@ -36,7 +36,7 @@ const ORDERING_OPTIONS: Array<{ label: string; value: ExpenseOrdering }> = [
 export function ExpenseListPage() {
   const [filters, setFilters] = useState<ExpenseListParams>({ page: 1, ordering: '-createdAt' });
 
-// Como la API no ofrece estos filtros, se aplican únicamente sobre los resultados ya cargados.
+  // Como la API no ofrece estos filtros, se aplican únicamente sobre los resultados ya cargados.
   const [minAmount, setMinAmount] = useState('');
   const [maxAmount, setMaxAmount] = useState('');
   const [warningsOnly, setWarningsOnly] = useState(false);

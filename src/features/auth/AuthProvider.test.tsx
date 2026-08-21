@@ -23,7 +23,6 @@ function SessionProbe() {
   );
 }
 
-
 function renderProvider() {
   return render(
     <StrictMode>

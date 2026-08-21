@@ -16,7 +16,7 @@ services:
     ports:
       - '3000:3000'
     environment:
-# La URL se resuelve desde el navegador, por lo que apunta al puerto del backend publicado en el equipo.
+      # La URL se resuelve desde el navegador, por lo que apunta al puerto del backend publicado en el equipo.
       VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
       VITE_USE_POLLING: 'true'
     volumes:

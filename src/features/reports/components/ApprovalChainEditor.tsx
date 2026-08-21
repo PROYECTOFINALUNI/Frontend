@@ -173,9 +173,7 @@ export function ApprovalChainEditor({
       {canEdit && !showManualEditor && (
         <CardBody className="border-t border-slate-200 bg-slate-50">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-sm text-slate-600">
-              Need a different reviewer for this one report?
-            </p>
+            <p className="text-sm text-slate-600">Need a different reviewer for this one report?</p>
             <Button variant="secondary" size="sm" onClick={() => setShowManualEditor(true)}>
               Override with a manual chain
             </Button>
