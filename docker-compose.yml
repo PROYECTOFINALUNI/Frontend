@@ -1,0 +1,42 @@
+# Este archivo Docker Compose gestiona únicamente el frontend.
+# El backend se ejecuta de forma independiente en el puerto 8000.
+
+# Desarrollo con recarga automática:
+# docker compose up frontend
+
+# Versión de producción con nginx:
+# docker compose --profile prod up
+
+services:
+  frontend:
+    build:
+      context: .
+      target: dev
+    container_name: expense-frontend-dev
+    ports:
+      - '3000:3000'
+    environment:
+# La URL se resuelve desde el navegador, por lo que apunta al puerto del backend publicado en el equipo.
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+      VITE_USE_POLLING: 'true'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost:3000/']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  frontend-prod:
+    profiles: ['prod']
+    build:
+      context: .
+      target: production
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+    container_name: expense-frontend-prod
+    ports:
+      - '3000:3000'
+    restart: unless-stopped

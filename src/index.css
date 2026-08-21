@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-brand-50: oklch(0.97 0.014 254);
+  --color-brand-100: oklch(0.93 0.032 254);
+  --color-brand-200: oklch(0.87 0.06 254);
+  --color-brand-300: oklch(0.79 0.096 254);
+  --color-brand-400: oklch(0.7 0.135 254);
+  --color-brand-500: oklch(0.62 0.166 254);
+  --color-brand-600: oklch(0.54 0.176 254);
+  --color-brand-700: oklch(0.46 0.155 254);
+  --color-brand-800: oklch(0.39 0.126 254);
+  --color-brand-900: oklch(0.33 0.1 254);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+  }
+
+ /* El foco del teclado debe permanecer visible para garantizar la accesibilidad. */
+  :focus-visible {
+    @apply outline-brand-600 rounded-sm outline-2 outline-offset-2;
+  }
+
+/* Mantiene alineados los dígitos para facilitar la comparación de valores monetarios. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .skip-link {
+    @apply sr-only;
+  }
+
+  .skip-link:focus {
+    @apply bg-brand-700 not-sr-only fixed top-2 left-2 z-50 rounded-md px-4 py-2 text-white;
+  }
+}
