@@ -16,8 +16,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient();
   const restoreStarted = useRef(false);
 
-// Restaura la sesión al cargar la aplicación obteniendo un nuevo token de acceso.
-// La referencia evita que este proceso se ejecute más de una vez en StrictMode.
+  // Restaura la sesión al cargar la aplicación obteniendo un nuevo token de acceso.
+  // La referencia evita que este proceso se ejecute más de una vez en StrictMode.
   useEffect(() => {
     if (restoreStarted.current) return;
     restoreStarted.current = true;
@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     void restore();
   }, []);
 
-// Si falla la renovación del token, se cierra la sesión.
+  // Si falla la renovación del token, se cierra la sesión.
   useEffect(() => {
     onSessionExpired(() => {
       setUser(null);
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async (credentials: { email: string; password: string }) => {
       const response = await loginRequest(credentials);
       setUser(response.user);
-// Se limpia la información almacenada del usuario anterior al iniciar una nueva sesión.
+      // Se limpia la información almacenada del usuario anterior al iniciar una nueva sesión.
       queryClient.clear();
       return response.user;
     },

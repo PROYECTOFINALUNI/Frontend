@@ -46,9 +46,7 @@ function CriteriaSummary({
   values: Array<string | null>;
   lookup: (id: string | null) => string;
 }) {
-  return (
-    <span className="text-slate-600">{values.map((value) => lookup(value)).join(' · ')}</span>
-  );
+  return <span className="text-slate-600">{values.map((value) => lookup(value)).join(' · ')}</span>;
 }
 
 export function ApprovalRulesPage() {
@@ -110,8 +108,8 @@ export function ApprovalRulesPage() {
           A rule fires when an expense is strictly above its threshold in the matching currency and
           category, and the submitter matches its attributes. Its approver criteria resolve to a
           pool, and any one of those people can approve or reject the step. If no rule matches, or
-          the matching rules resolve to nobody, the report is <strong>approved automatically</strong>{' '}
-          on submit.
+          the matching rules resolve to nobody, the report is{' '}
+          <strong>approved automatically</strong> on submit.
         </AlertBanner>
       </div>
 

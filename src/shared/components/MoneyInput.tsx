@@ -45,7 +45,7 @@ export function MoneyInput({
   const resolvedHint = hint ?? defaultHint;
 
   function handleChange(next: string) {
-// Solo permite dígitos y un separador decimal; las comas se convierten en puntos.
+    // Solo permite dígitos y un separador decimal; las comas se convierten en puntos.
     const normalized = next.replace(/,/g, '.');
     if (normalized === '') {
       onChange('');
@@ -90,7 +90,7 @@ export function MoneyInput({
           onBlur={onBlur}
           disabled={disabled}
           required={required}
- // Se usa texto para conservar el valor exacto introducido, incluidos los ceros finales.
+          // Se usa texto para conservar el valor exacto introducido, incluidos los ceros finales.
           type="text"
           inputMode="decimal"
           autoComplete="off"

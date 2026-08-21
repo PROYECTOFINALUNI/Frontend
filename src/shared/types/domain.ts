@@ -94,7 +94,7 @@ export type LoginResponse = {
 
 export type RefreshResponse = {
   access: string;
-/** Se incluye porque SIMPLE_JWT genera un nuevo refresh token en cada renovación. */
+  /** Se incluye porque SIMPLE_JWT genera un nuevo refresh token en cada renovación. */
   refresh?: string;
 };
 
@@ -140,7 +140,6 @@ export type CategoryWrite = {
   active: boolean;
   customFields: CategoryFieldWrite[];
 };
-
 
 export type WarningRule = {
   id: string;
@@ -200,7 +199,6 @@ export type ExpenseWarning = {
   message: string;
   createdAt: string;
 };
-
 
 export type PreviewWarning = {
   severity: WarningSeverity;
@@ -280,7 +278,6 @@ export type ExpenseWrite = {
   customFields: ExpenseCustomFieldWrite[];
 };
 
-
 export type ExpensePatch = Partial<Omit<ExpenseWrite, 'reportId'>>;
 
 export type ExpensePreview = {
@@ -317,7 +314,6 @@ export type ApprovalStep = {
   createdAt: string;
   updatedAt: string;
 };
-
 
 export type ApprovalChainPreview = {
   autoApprove: boolean;

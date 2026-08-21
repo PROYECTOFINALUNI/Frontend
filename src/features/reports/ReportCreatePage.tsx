@@ -32,7 +32,7 @@ export function ReportCreatePage() {
     setFormError(null);
     try {
       const report = await createReport.mutateAsync(values);
-// Redirige al detalle del informe, donde se pueden añadir los gastos.
+      // Redirige al detalle del informe, donde se pueden añadir los gastos.
       navigate(`/reports/${report.id}`, { replace: true });
     } catch (error) {
       const { fieldErrors, formError: message } = extractFormErrors(error);

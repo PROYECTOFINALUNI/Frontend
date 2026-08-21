@@ -35,7 +35,7 @@ export function ReportActions({ report }: { report: ReportDetail }) {
       setOpenModal(null);
       return true;
     } catch (error) {
-// Los conflictos muestran un mensaje específico y actualizan el informe con su estado real.
+      // Los conflictos muestran un mensaje específico y actualizan el informe con su estado real.
       setActionError(toMessage(error));
       if (error instanceof ApiError && error.isConflict) {
         return false;
@@ -44,7 +44,7 @@ export function ReportActions({ report }: { report: ReportDetail }) {
     }
   }
 
-// Los aprobadores se asignan al enviar el informe, por lo que la cadena no bloquea el envío.
+  // Los aprobadores se asignan al enviar el informe, por lo que la cadena no bloquea el envío.
   const submitBlockedReason = permissions.isEmpty
     ? 'Add at least one expense before submitting.'
     : hasBlockingWarning(permissions.blockingWarnings)
@@ -163,7 +163,7 @@ function DelegateDialog({
   const delegate = useDelegateApproval(report.id);
   const [formError, setFormError] = useState<string | null>(null);
 
-// Los aprobadores solo ven otros aprobadores disponibles; los administradores pueden ver a todos los usuarios.
+  // Los aprobadores solo ven otros aprobadores disponibles; los administradores pueden ver a todos los usuarios.
   const usersQuery = useUsers({ active: true }, { enabled: open });
 
   const candidates = (usersQuery.data?.results ?? []).filter(
@@ -238,9 +238,7 @@ function DelegateDialog({
         </Select>
 
         {candidates.length === 0 && (
-          <AlertBanner tone="warning">
-            There is nobody else to reassign this to.
-          </AlertBanner>
+          <AlertBanner tone="warning">There is nobody else to reassign this to.</AlertBanner>
         )}
 
         <Textarea

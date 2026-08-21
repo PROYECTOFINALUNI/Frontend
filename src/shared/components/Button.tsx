@@ -41,7 +41,7 @@ export function Button({
       type="button"
       {...props}
       disabled={isDisabled}
-// El estado de carga se indica tanto visualmente como para los lectores de pantalla.
+      // El estado de carga se indica tanto visualmente como para los lectores de pantalla.
       aria-busy={isLoading || undefined}
       className={cn(
         'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors',

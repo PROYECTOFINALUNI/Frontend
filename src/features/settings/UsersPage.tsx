@@ -80,8 +80,8 @@ export function UsersPage() {
       {query.isSuccess && approverCount === 0 && (
         <div className="mb-4">
           <AlertBanner tone="warning" title="No eligible approvers">
-            No active user has the Approver or Admin role, so no approval rule can resolve to
-            anyone and every report will be approved automatically on submit.
+            No active user has the Approver or Admin role, so no approval rule can resolve to anyone
+            and every report will be approved automatically on submit.
           </AlertBanner>
         </div>
       )}

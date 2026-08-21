@@ -52,7 +52,7 @@ export function CategoriesPage() {
       await deleteCategory.mutateAsync(pendingDelete.id);
       setPendingDelete(null);
     } catch (error) {
-// La API devuelve `category_in_use` cuando la categoría todavía está siendo utilizada.
+      // La API devuelve `category_in_use` cuando la categoría todavía está siendo utilizada.
       setActionError(toMessage(error));
       setPendingDelete(null);
     }
@@ -267,7 +267,7 @@ function CategoryDialog({
                 setError(field, { type: 'server', message: fieldMessage });
               }
             }
-// Los errores de `customFields` que no pueden asociarse a un campo concreto se muestran a nivel general del formulario.
+            // Los errores de `customFields` que no pueden asociarse a un campo concreto se muestran a nivel general del formulario.
             setFormError(fieldErrors.customFields ?? message);
           }
         })}
@@ -338,7 +338,7 @@ function CustomFieldEditor({
   errors: ReturnType<typeof useForm<CategoryFormValues>>['formState']['errors'];
   inUseIds: Set<string>;
 }) {
-// Se usa `keyName` para evitar conflictos con el `id` propio del campo.
+  // Se usa `keyName` para evitar conflictos con el `id` propio del campo.
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'customFields',

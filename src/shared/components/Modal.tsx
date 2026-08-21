@@ -37,7 +37,7 @@ export function Modal({
     const dialog = dialogRef.current;
     if (!dialog) return;
 
-// Se ejecuta también al cerrar con Escape, manteniendo sincronizado el estado de React.
+    // Se ejecuta también al cerrar con Escape, manteniendo sincronizado el estado de React.
     const handleClose = () => onClose();
     dialog.addEventListener('close', handleClose);
     return () => dialog.removeEventListener('close', handleClose);
