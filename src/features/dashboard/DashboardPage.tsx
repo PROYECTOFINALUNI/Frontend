@@ -138,7 +138,7 @@ export function DashboardPage() {
           />
 
           <MetricCard
-            label="Avisos bloqueantes"
+            label="Gastos bloqueados"
             value={
               draftExpenses.isPending
                 ? undefined
