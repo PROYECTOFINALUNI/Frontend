@@ -95,7 +95,7 @@ export function ApprovalInboxPage() {
                         <p className="mt-1 text-xs text-[#8b95a5]">
                           {report.expenseCount}{' '}
                           {report.expenseCount ===
-                          1
+                            1
                             ? 'gasto'
                             : 'gastos'}
 
@@ -173,7 +173,7 @@ export function ApprovalInboxPage() {
                       <p className="mt-1 text-xs text-[#8b95a5]">
                         {report.expenseCount}{' '}
                         {report.expenseCount ===
-                        1
+                          1
                           ? 'gasto'
                           : 'gastos'}
                       </p>

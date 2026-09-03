@@ -4,14 +4,14 @@ import { formatDateTime, relativeTime } from '@/shared/utils/dates';
 import { cn } from '@/shared/utils/cn';
 
 const ACTION_LABELS: Record<ApprovalAction, string> = {
-  SUBMITTED: 'submitted the report',
-  APPROVED: 'approved the report',
-  AUTO_APPROVED: 'submitted a report that was approved automatically',
-  REJECTED: 'rejected the report',
-  DELEGATED: 'reassigned the approval',
-  COMMENTED: 'commented',
-  RETURNED_TO_DRAFT: 'returned the report to draft',
-  PAID: 'marked the report as paid',
+  SUBMITTED: 'envió el informe',
+  APPROVED: 'aprobó el informe',
+  AUTO_APPROVED: 'envió un informe que fue aprobado automáticamente',
+  REJECTED: 'rechazó el informe',
+  DELEGATED: 'reasignó la aprobación',
+  COMMENTED: 'añadió un comentario',
+  RETURNED_TO_DRAFT: 'devolvió el informe a borrador',
+  PAID: 'marcó el informe como pagado',
 };
 
 const ACTION_MARKERS: Record<ApprovalAction, { glyph: string; className: string }> = {
@@ -25,7 +25,7 @@ const ACTION_MARKERS: Record<ApprovalAction, { glyph: string; className: string 
   PAID: { glyph: '€', className: 'bg-violet-100 text-violet-800 ring-violet-300' },
 };
 
-/** Immutable audit trail. The serializer returns at most the 50 latest events. */
+
 export function ApprovalTimeline({ events }: { events: ApprovalEvent[] }) {
   if (events.length === 0) {
     return (
