@@ -260,7 +260,7 @@ export function ExpenseForm({
               label="Merchant"
               required
               autoFocus
-              placeholder="e.g. Hotel Barcelona"
+              placeholder="Ej. Hotel Barcelona"
               error={errors.merchant?.message}
               {...register('merchant')}
             />

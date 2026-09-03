@@ -393,7 +393,7 @@ export function ApprovalRulesPage() {
                               <span className="font-medium text-amber-700">
                                 No hay
                                 aprobadores
-                                coincidentes —
+                                que coincidan —
                                 se omite esta
                                 regla
                               </span>
@@ -404,8 +404,8 @@ export function ApprovalRulesPage() {
                                 }{' '}
                                 {rule.approverPoolSize ===
                                   1
-                                  ? 'persona coincidente'
-                                  : 'personas coincidentes'}
+                                  ? 'persona coincide'
+                                  : 'personas coinciden'}
                               </span>
                             )}
                           </span>
