@@ -66,6 +66,7 @@ export function ExpenseListPage() {
   const [filters, setFilters] =
     useState<ExpenseListParams>({
       page: 1,
+      pageSize: 10,
       ordering: '-createdAt',
     });
 
@@ -447,6 +448,7 @@ export function ExpenseListPage() {
               <div className="border-t border-black/[0.06] bg-[#fbfbfc]">
                 <Pagination
                   page={filters.page ?? 1}
+                  pageSize={filters.pageSize ?? 10}
                   count={query.data.count}
                   onPageChange={(page) =>
                     update({ page })

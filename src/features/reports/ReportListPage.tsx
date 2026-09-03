@@ -24,7 +24,10 @@ import { useReports } from './api';
 
 export function ReportListPage() {
   const [filters, setFilters] =
-    useState<ReportListParams>({ page: 1 });
+    useState<ReportListParams>({
+      page: 1,
+      pageSize: 10,
+    });
 
   const query = useReports(filters);
 
@@ -299,6 +302,7 @@ export function ReportListPage() {
               <div className="border-t border-black/[0.06] bg-[#fbfbfc]">
                 <Pagination
                   page={filters.page ?? 1}
+                  pageSize={filters.pageSize ?? 10}
                   count={query.data.count}
                   onPageChange={(page) =>
                     update({ page })
