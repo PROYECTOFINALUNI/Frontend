@@ -1,11 +1,5 @@
 /**
- * Every error the API emits passes through `common.api.api_exception_handler`,
- * which normalizes the body to `{ code, detail, fields }`.
- *
- * `fields` is populated only for validation errors; its keys are camelCased
- * serializer field names and its values are arrays of messages. Nested
- * serializers (`tax`) produce nested objects.
- */
+ * La API normaliza los errores con el formato `{ code, detail, fields }`. `fields` solo contiene errores de validación y puede incluir objetos anidados */
 
 export type ApiFieldErrors = Record<string, unknown>;
 
@@ -47,7 +41,7 @@ export class ApiError extends Error {
     return this.status === 404;
   }
 
-  /** 409 responses carry a domain code describing the workflow conflict. */
+  /** Las respuestas 409 incluyen un código que indica el conflicto del flujo de trabajo */
   get isConflict(): boolean {
     return this.status === 409;
   }
@@ -57,7 +51,7 @@ export class ApiError extends Error {
   }
 }
 
-/** Raised when the request never reached the server. */
+/** Se lanza cuando la solicitud no llega al servidor. */
 export class NetworkError extends Error {
   readonly cause?: unknown;
 
@@ -68,38 +62,50 @@ export class NetworkError extends Error {
   }
 }
 
-/**
- * Domain conflict codes raised by the approval and expense services. Each one
- * gets a specific, actionable message rather than a raw 409.
- */
+/** Códigos de conflicto del dominio con mensajes específicos para errores 409. */
 export const CONFLICT_MESSAGES: Record<string, string> = {
   blocking_warning:
-    'This report has blocking warnings. Resolve them on the flagged expenses before submitting.',
-  empty_report: 'Add at least one expense before submitting this report.',
+    'Este informe tiene avisos bloqueantes. Resuélvelos en los gastos marcados antes de enviarlo.',
+  empty_report:
+    'Añade al menos un gasto antes de enviar este informe.',
   invalid_approval_chain:
-    'The approval chain must be contiguous and start at step 1. Ask an admin to fix it.',
+    'La cadena de aprobación debe ser continua y empezar en el paso 1. Pide a un administrador que la corrija.',
   invalid_approver:
-    'Every approver must be active, hold the Approver or Admin role, and not be the report owner.',
-  invalid_expenses: 'Every expense must belong to the report owner and still be a draft.',
-  not_current_approver: 'You are not the current approver for this report.',
-  no_pending_step: 'There is no pending approval step on this report.',
-  invalid_state_transition: 'This action is not allowed from the report’s current status.',
-  submit_forbidden: 'Only the report owner or an admin can submit this report.',
-  return_forbidden: 'Only the report owner or an admin can return this report to draft.',
-  mark_paid_forbidden: 'Only an admin can mark a report as paid.',
-  comment_forbidden: 'You cannot comment on this report.',
+    'Todos los aprobadores deben estar activos, tener el rol de Aprobador o Administrador y no ser el propietario del informe.',
+  invalid_expenses:
+    'Todos los gastos deben pertenecer al propietario del informe y seguir en estado borrador.',
+  not_current_approver:
+    'No eres el aprobador actual de este informe.',
+  no_pending_step:
+    'No hay ningún paso de aprobación pendiente en este informe.',
+  invalid_state_transition:
+    'Esta acción no está permitida desde el estado actual del informe.',
+  submit_forbidden:
+    'Solo el propietario del informe o un administrador pueden enviarlo.',
+  return_forbidden:
+    'Solo el propietario del informe o un administrador pueden devolverlo a borrador.',
+  mark_paid_forbidden:
+    'Solo un administrador puede marcar un informe como pagado.',
+  comment_forbidden:
+    'No puedes añadir comentarios a este informe.',
   approval_steps_locked:
-    'Approval steps can only be edited by an admin while the report is a draft.',
-  duplicate_step_order: 'Another step already uses that position in the chain.',
-  report_not_owned: 'Only the report owner can add or edit expenses.',
-  report_not_editable: 'Only a draft report’s owner or an admin can edit it.',
-  report_not_deletable: 'This report can no longer be deleted.',
-  category_in_use: 'This category is used by existing records and cannot be deleted.',
-  invalid_credentials: 'Email or password is incorrect.',
-  database_unavailable: 'The server database is unavailable. Try again shortly.',
+    'Los pasos de aprobación solo pueden ser editados por un administrador mientras el informe esté en borrador.',
+  duplicate_step_order:
+    'Ya existe otro paso en esa posición de la cadena.',
+  report_not_owned:
+    'Solo el propietario del informe puede añadir o editar gastos.',
+  report_not_editable:
+    'Solo el propietario de un informe en borrador o un administrador pueden editarlo.',
+  report_not_deletable:
+    'Este informe ya no se puede eliminar.',
+  category_in_use:
+    'Esta categoría está siendo utilizada y no se puede eliminar.',
+  invalid_credentials:
+    'Email o contraseña incorrecta.',
+  database_unavailable:
+    'La base de datos del servidor no está disponible. Inténtalo de nuevo en unos instantes.',
 };
 
-/** A human-readable message for any thrown value. */
 export function toMessage(error: unknown): string {
   if (error instanceof ApiError) {
     return CONFLICT_MESSAGES[error.code] ?? error.detail;
@@ -110,14 +116,9 @@ export function toMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
   }
-  return 'Something went wrong.';
+  return 'Algo ha ido mal.';
 }
 
-/**
- * Flatten DRF's nested `fields` into dot-paths that React Hook Form
- * understands, e.g. `{ tax: { rateBps: ["..."] } }` becomes
- * `{ "tax.rateBps": "..." }`.
- */
 export function flattenFieldErrors(fields: ApiFieldErrors, prefix = ''): Record<string, string> {
   const flat: Record<string, string> = {};
 
@@ -137,10 +138,6 @@ export function flattenFieldErrors(fields: ApiFieldErrors, prefix = ''): Record<
   return flat;
 }
 
-/**
- * Errors DRF cannot attach to a field arrive under `non_field_errors`, which
- * the camelCase renderer turns into `nonFieldErrors`.
- */
 export const NON_FIELD_ERROR_KEYS = ['nonFieldErrors', 'non_field_errors', 'detail'];
 
 export function extractFormErrors(error: unknown): {
