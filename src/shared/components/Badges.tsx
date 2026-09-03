@@ -12,7 +12,7 @@ const STATUS_STYLES: Record<ExpenseStatus, { className: string; glyph: string; l
     glyph: '✓',
     label: 'Aprobado',
   },
-  REJECTED: { className: 'bg-red-100 text-red-800 ring-red-300', glyph: '✕', label: 'Rejected' },
+  REJECTED: { className: 'bg-red-100 text-red-800 ring-red-300', glyph: '✕', label: 'Rechazado' },
   PAID: {
     className: 'bg-violet-100 text-violet-800 ring-violet-300',
     glyph: '€',
@@ -78,18 +78,18 @@ const STEP_STYLES: Record<ApprovalStepStatus, { className: string; glyph: string
     PENDING: {
       className: 'bg-amber-100 text-amber-900 ring-amber-300',
       glyph: '⋯',
-      label: 'Pending',
+      label: 'Pendiente',
     },
     APPROVED: {
       className: 'bg-emerald-100 text-emerald-800 ring-emerald-300',
       glyph: '✓',
-      label: 'Approved',
+      label: 'Aprobado',
     },
-    REJECTED: { className: 'bg-red-100 text-red-800 ring-red-300', glyph: '✕', label: 'Rejected' },
+    REJECTED: { className: 'bg-red-100 text-red-800 ring-red-300', glyph: '✕', label: 'Rechazado' },
     SKIPPED: {
       className: 'bg-slate-100 text-slate-600 ring-slate-300',
       glyph: '–',
-      label: 'Skipped',
+      label: 'Omitido',
     },
   };
 
