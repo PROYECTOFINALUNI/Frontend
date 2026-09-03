@@ -24,30 +24,30 @@ export function ExpenseTable({
         <thead className="bg-slate-50">
           <tr>
             <th scope="col" className="px-4 py-2 text-left font-medium text-slate-600">
-              Merchant
+              Comercio
             </th>
             <th scope="col" className="px-4 py-2 text-left font-medium text-slate-600">
-              Date
+              Fecha
             </th>
             <th scope="col" className="px-4 py-2 text-left font-medium text-slate-600">
-              Category
+              Categoría
             </th>
             <th scope="col" className="px-4 py-2 text-right font-medium text-slate-600">
-              Amount
+              Importe
             </th>
             <th scope="col" className="px-4 py-2 text-right font-medium text-slate-600">
-              Tax
+              Impuesto
             </th>
             <th scope="col" className="px-4 py-2 text-right font-medium text-slate-600">
               Total
             </th>
             {showStatus && (
               <th scope="col" className="px-4 py-2 text-left font-medium text-slate-600">
-                Status
+                Estado
               </th>
             )}
             <th scope="col" className="px-4 py-2 text-left font-medium text-slate-600">
-              Warnings
+              Avisos
             </th>
             {renderActions && (
               <th scope="col" className="px-4 py-2 text-right font-medium text-slate-600">
@@ -77,7 +77,7 @@ export function ExpenseTable({
                 <td className="px-4 py-2 text-right">
                   <MoneyText value={expense.amount} />
                   <span className="block text-xs text-slate-500">
-                    {expense.tax.included ? 'tax included' : 'tax excluded'}
+                    {expense.tax.included ? 'impuesto incluido' : 'impuesto no incluido'}
                   </span>
                 </td>
                 <td className="px-4 py-2 text-right">
@@ -105,7 +105,7 @@ export function ExpenseTable({
                       )}
                     </span>
                   ) : (
-                    <span className="text-xs text-slate-400">None</span>
+                    <span className="text-xs text-slate-400">—</span>
                   )}
                 </td>
                 {renderActions && (
