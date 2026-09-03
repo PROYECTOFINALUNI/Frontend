@@ -1,124 +1,200 @@
 import { Link } from 'react-router-dom';
 
 import { Button } from '@/shared/components/Button';
+
 import { Card, CardHeader } from '@/shared/components/Card';
+
 import { MoneyTotals } from '@/shared/components/MoneyText';
+
 import { PageHeader } from '@/shared/components/PageHeader';
+
 import { StatusBadge } from '@/shared/components/Badges';
-import { EmptyState, ErrorState, TableSkeleton } from '@/shared/components/States';
+
+import {
+  EmptyState,
+  ErrorState,
+  TableSkeleton,
+} from '@/shared/components/States';
+
 import { formatDateTime } from '@/shared/utils/dates';
+
 import { useReports } from '@/features/reports/api';
 
 export function ApprovalInboxPage() {
-  // `pendingMyApproval` devuelve los informes pendientes de aprobación por el usuario actual.
-  const pending = useReports({ pendingMyApproval: true });
-  const assigned = useReports({ role: 'approver' });
+  // Estedevuelve los informes pendientes de aprobación por el usuario actual
+  const pending = useReports({
+    pendingMyApproval: true,
+  });
 
-  const decided = (assigned.data?.results ?? []).filter(
+  const assigned = useReports({
+    role: 'approver',
+  });
+
+  const decided = (
+    assigned.data?.results ?? []
+  ).filter(
     (report) =>
-      report.status === 'APPROVED' || report.status === 'REJECTED' || report.status === 'PAID'
+      report.status === 'APPROVED' ||
+      report.status === 'REJECTED' ||
+      report.status === 'PAID'
   );
 
   return (
-    <>
+    <div className="space-y-6">
       <PageHeader
-        title="Approvals"
-        description="Reports waiting on your decision, in the order the approval chain defines."
+        title="Aprobaciones"
+        description="Revisa los informes pendientes de tu decisión y consulta el historial de los que ya has gestionado."
       />
 
       <div className="space-y-6">
-        <Card>
+        {/* Pendiente de aprobación */}
+        <Card className="overflow-hidden rounded-2xl border border-black/[0.06] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
           <CardHeader
-            title="Awaiting your decision"
-            description="You can decide these. A colleague in the same approver pool may get there first."
+            title="Pendientes de tu decisión"
+            description="Estos informes están esperando tu aprobación. Si compartes el mismo grupo de aprobación con otra persona, cualquiera de vosotros puede revisarlos primero."
           />
 
-          {pending.isPending && <TableSkeleton columns={5} />}
+          {pending.isPending && (
+            <TableSkeleton columns={5} />
+          )}
 
           {pending.isError && (
-            <ErrorState error={pending.error} onRetry={() => void pending.refetch()} />
-          )}
-
-          {pending.isSuccess && pending.data.results.length === 0 && (
-            <EmptyState
-              title="Nothing to approve"
-              description="When a report reaches your step in an approval chain, it appears here."
+            <ErrorState
+              error={pending.error}
+              onRetry={() =>
+                void pending.refetch()
+              }
             />
           )}
 
-          {pending.isSuccess && pending.data.results.length > 0 && (
-            <ul className="divide-y divide-slate-100">
-              {pending.data.results.map((report) => (
-                <li
-                  key={report.id}
-                  className="flex flex-wrap items-center gap-3 px-4 py-3 hover:bg-slate-50"
-                >
-                  <div className="min-w-0 flex-1">
-                    <Link
-                      to={`/reports/${report.id}`}
-                      className="text-brand-700 font-medium hover:underline"
+          {pending.isSuccess &&
+            pending.data.results.length === 0 && (
+              <EmptyState
+                title="No tienes nada pendiente de aprobar"
+                description="Cuando un informe llegue a tu paso dentro de la cadena de aprobación, aparecerá aquí."
+              />
+            )}
+
+          {pending.isSuccess &&
+            pending.data.results.length > 0 && (
+              <ul className="divide-y divide-black/[0.05]">
+                {pending.data.results.map(
+                  (report) => (
+                    <li
+                      key={report.id}
+                      className="flex flex-wrap items-center gap-4 px-5 py-4 transition-colors hover:bg-[#fafafa]"
                     >
-                      {report.title}
-                    </Link>
-                    <p className="text-xs text-slate-500">
-                      {report.expenseCount} {report.expenseCount === 1 ? 'expense' : 'expenses'}
-                      {report.submittedAt && ` · submitted ${formatDateTime(report.submittedAt)}`}
-                    </p>
-                  </div>
+                      <div className="min-w-0 flex-1">
+                        <Link
+                          to={`/reports/${report.id}`}
+                          className="block max-w-[420px] truncate text-sm font-semibold text-[#202632] transition-colors hover:text-[#4f46e5]"
+                        >
+                          {report.title}
+                        </Link>
 
-                  <MoneyTotals totals={report.totals} />
+                        <p className="mt-1 text-xs text-[#8b95a5]">
+                          {report.expenseCount}{' '}
+                          {report.expenseCount ===
+                          1
+                            ? 'gasto'
+                            : 'gastos'}
 
-                  <Link to={`/reports/${report.id}`}>
-                    <Button size="sm">Review</Button>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
+                          {report.submittedAt &&
+                            ` · enviado ${formatDateTime(
+                              report.submittedAt
+                            )}`}
+                        </p>
+                      </div>
+
+                      <div className="font-semibold text-[#111827]">
+                        <MoneyTotals
+                          totals={report.totals}
+                        />
+                      </div>
+
+                      <Link
+                        to={`/reports/${report.id}`}
+                      >
+                        <Button size="sm">
+                          Revisar
+                        </Button>
+                      </Link>
+                    </li>
+                  )
+                )}
+              </ul>
+            )}
         </Card>
 
-        <Card>
+        {/* Decisiones historial */}
+        <Card className="overflow-hidden rounded-2xl border border-black/[0.06] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
           <CardHeader
-            title="Already decided"
-            description="Reports you were an approver on that have reached a final state."
+            title="Decisiones anteriores"
+            description="Informes en los que participaste como aprobador y que ya han alcanzado un estado final."
           />
 
-          {assigned.isPending && <TableSkeleton columns={4} />}
-
-          {assigned.isError && (
-            <ErrorState error={assigned.error} onRetry={() => void assigned.refetch()} />
+          {assigned.isPending && (
+            <TableSkeleton columns={4} />
           )}
 
-          {assigned.isSuccess && decided.length === 0 && (
-            <EmptyState
-              title="No decisions yet"
-              description="Your approval history appears here."
+          {assigned.isError && (
+            <ErrorState
+              error={assigned.error}
+              onRetry={() =>
+                void assigned.refetch()
+              }
             />
           )}
 
-          {assigned.isSuccess && decided.length > 0 && (
-            <ul className="divide-y divide-slate-100">
-              {decided.map((report) => (
-                <li key={report.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
-                  <div className="min-w-0 flex-1">
-                    <Link
-                      to={`/reports/${report.id}`}
-                      className="text-brand-700 font-medium hover:underline"
-                    >
-                      {report.title}
-                    </Link>
-                    <p className="text-xs text-slate-500">
-                      {report.expenseCount} {report.expenseCount === 1 ? 'expense' : 'expenses'}
-                    </p>
-                  </div>
-                  <StatusBadge status={report.status} />
-                  <MoneyTotals totals={report.totals} emphasis={false} />
-                </li>
-              ))}
-            </ul>
-          )}
+          {assigned.isSuccess &&
+            decided.length === 0 && (
+              <EmptyState
+                title="Todavía no hay decisiones"
+                description="Tu historial de aprobaciones aparecerá aquí."
+              />
+            )}
+
+          {assigned.isSuccess &&
+            decided.length > 0 && (
+              <ul className="divide-y divide-black/[0.05]">
+                {decided.map((report) => (
+                  <li
+                    key={report.id}
+                    className="flex flex-wrap items-center gap-4 px-5 py-4 transition-colors hover:bg-[#fafafa]"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <Link
+                        to={`/reports/${report.id}`}
+                        className="block max-w-[420px] truncate text-sm font-semibold text-[#202632] transition-colors hover:text-[#4f46e5]"
+                      >
+                        {report.title}
+                      </Link>
+
+                      <p className="mt-1 text-xs text-[#8b95a5]">
+                        {report.expenseCount}{' '}
+                        {report.expenseCount ===
+                        1
+                          ? 'gasto'
+                          : 'gastos'}
+                      </p>
+                    </div>
+
+                    <StatusBadge
+                      status={report.status}
+                    />
+
+                    <div className="font-semibold text-[#111827]">
+                      <MoneyTotals
+                        totals={report.totals}
+                        emphasis={false}
+                      />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
         </Card>
       </div>
-    </>
+    </div>
   );
 }
