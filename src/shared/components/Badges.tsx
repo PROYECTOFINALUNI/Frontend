@@ -5,18 +5,18 @@ import { cn } from '@/shared/utils/cn';
 /** Los indicadores combinan color, texto e iconos para que el estado no dependa únicamente del color.
  */
 const STATUS_STYLES: Record<ExpenseStatus, { className: string; glyph: string; label: string }> = {
-  DRAFT: { className: 'bg-slate-100 text-slate-700 ring-slate-300', glyph: '○', label: 'Draft' },
-  SUBMITTED: { className: 'bg-sky-100 text-sky-800 ring-sky-300', glyph: '◐', label: 'Submitted' },
+  DRAFT: { className: 'bg-slate-100 text-slate-700 ring-slate-300', glyph: '○', label: 'Borrador' },
+  SUBMITTED: { className: 'bg-sky-100 text-sky-800 ring-sky-300', glyph: '◐', label: 'Enviado' },
   APPROVED: {
     className: 'bg-emerald-100 text-emerald-800 ring-emerald-300',
     glyph: '✓',
-    label: 'Approved',
+    label: 'Aprobado',
   },
   REJECTED: { className: 'bg-red-100 text-red-800 ring-red-300', glyph: '✕', label: 'Rejected' },
   PAID: {
     className: 'bg-violet-100 text-violet-800 ring-violet-300',
     glyph: '€',
-    label: 'Paid',
+    label: 'Pagado',
   },
 };
 
@@ -45,9 +45,9 @@ const SEVERITY_STYLES: Record<
   WARNING: {
     className: 'bg-amber-100 text-amber-900 ring-amber-300',
     glyph: '!',
-    label: 'Warning',
+    label: 'Aviso',
   },
-  BLOCKING: { className: 'bg-red-100 text-red-800 ring-red-300', glyph: '⛔', label: 'Blocking' },
+  BLOCKING: { className: 'bg-red-100 text-red-800 ring-red-300', glyph: '⛔', label: 'Bloqueado' },
 };
 
 export function SeverityBadge({
