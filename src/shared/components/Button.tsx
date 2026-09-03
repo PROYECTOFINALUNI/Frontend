@@ -3,18 +3,37 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { cn } from '@/shared/utils/cn';
 
 type Variant = 'primary' | 'secondary' | 'danger' | 'ghost';
+
 type Size = 'sm' | 'md';
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-brand-600 text-white hover:bg-brand-700 disabled:bg-brand-300',
+  primary:
+    'bg-[#5b50f6] text-white shadow-[0_4px_12px_rgba(79,70,229,0.22)] ' +
+    'hover:bg-[#4f46e5] hover:shadow-[0_5px_14px_rgba(79,70,229,0.28)] ' +
+    'focus-visible:ring-2 focus-visible:ring-[#5b50f6] focus-visible:ring-offset-2 ' +
+    'disabled:bg-[#c7c3fb] disabled:shadow-none',
+
   secondary:
-    'bg-white text-slate-800 ring-1 ring-slate-300 ring-inset hover:bg-slate-50 disabled:text-slate-400',
-  danger: 'bg-red-600 text-white hover:bg-red-700 disabled:bg-red-300',
-  ghost: 'bg-transparent text-slate-700 hover:bg-slate-100 disabled:text-slate-400',
+    'border border-black/[0.08] bg-white text-[#4b5563] shadow-sm ' +
+    'hover:bg-[#f7f7f8] hover:text-[#111827] ' +
+    'focus-visible:ring-2 focus-visible:ring-[#d8d4fe] focus-visible:ring-offset-2 ' +
+    'disabled:text-[#9ca3af] disabled:bg-[#f9fafb]',
+
+  danger:
+    'bg-[#dc2626] text-white shadow-sm ' +
+    'hover:bg-[#b91c1c] ' +
+    'focus-visible:ring-2 focus-visible:ring-[#ef4444] focus-visible:ring-offset-2 ' +
+    'disabled:bg-[#fca5a5] disabled:shadow-none',
+
+  ghost:
+    'bg-transparent text-[#6b7280] ' +
+    'hover:bg-[#f4f4f5] hover:text-[#111827] ' +
+    'focus-visible:ring-2 focus-visible:ring-[#d8d4fe] focus-visible:ring-offset-2 ' +
+    'disabled:text-[#b6bdc8]',
 };
 
 const SIZES: Record<Size, string> = {
-  sm: 'px-2.5 py-1.5 text-sm',
+  sm: 'px-3 py-1.5 text-sm',
   md: 'px-4 py-2 text-sm',
 };
 
@@ -41,10 +60,11 @@ export function Button({
       type="button"
       {...props}
       disabled={isDisabled}
-      // El estado de carga se indica tanto visualmente como para los lectores de pantalla.
       aria-busy={isLoading || undefined}
       className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors',
+        'inline-flex items-center justify-center gap-2 rounded-lg font-semibold',
+        'transition-all duration-200',
+        'focus-visible:outline-none',
         'disabled:cursor-not-allowed',
         VARIANTS[variant],
         SIZES[size],
@@ -66,8 +86,20 @@ function Spinner() {
       aria-hidden="true"
       focusable="false"
     >
-      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+      />
     </svg>
   );
 }
