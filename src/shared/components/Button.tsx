@@ -20,10 +20,10 @@ const VARIANTS: Record<Variant, string> = {
     'disabled:text-[#9ca3af] disabled:bg-[#f9fafb]',
 
   danger:
-    'bg-[#dc2626] text-white shadow-sm ' +
-    'hover:bg-[#b91c1c] ' +
-    'focus-visible:ring-2 focus-visible:ring-[#ef4444] focus-visible:ring-offset-2 ' +
-    'disabled:bg-[#fca5a5] disabled:shadow-none',
+    'bg-[#fff1f2] text-[#dc2626] border border-[#fecdd3] shadow-sm ' +
+    'hover:bg-[#ffe4e6] hover:text-[#b91c1c] hover:border-[#fda4af] ' +
+    'focus-visible:ring-2 focus-visible:ring-[#fecdd3] focus-visible:ring-offset-2 ' +
+    'disabled:bg-[#fff7f7] disabled:text-[#fca5a5] disabled:border-[#fee2e2] disabled:shadow-none',
 
   ghost:
     'bg-transparent text-[#6b7280] ' +
