@@ -232,9 +232,11 @@ export function CategoriesPage() {
                       >
                         <th
                           scope="row"
-                          className="px-5 py-4 text-left font-mono text-xs font-normal text-[#697386]"
+                          className="px-5 py-4 text-left font-mono text-xs font-normal"
                         >
-                          {category.code}
+                          <span className="inline-flex rounded-md bg-[#f0efff] px-2 py-1 font-semibold text-[#4f46e5]">
+                            {category.code}
+                          </span>
                         </th>
 
                         <td className="px-4 py-4 font-semibold text-[#202632]">
