@@ -1,13 +1,8 @@
 import { useState } from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { zodResolver } from '@hookform/resolvers/zod';
-
 import { Button } from '@/shared/components/Button';
-
 import { Card } from '@/shared/components/Card';
-
 import {
   Checkbox,
   Input,
@@ -15,13 +10,9 @@ import {
 } from '@/shared/components/Field';
 
 import { Modal } from '@/shared/components/Modal';
-
 import { MoneyInput } from '@/shared/components/MoneyInput';
-
 import { PageHeader } from '@/shared/components/PageHeader';
-
 import { SeverityBadge } from '@/shared/components/Badges';
-
 import {
   AlertBanner,
   EmptyState,
@@ -90,9 +81,9 @@ export function WarningRulesPage() {
   ) =>
     categoryId
       ? (categoriesQuery.data?.find(
-          (category) =>
-            category.id === categoryId
-        )?.name ?? 'Desconocida')
+        (category) =>
+          category.id === categoryId
+      )?.name ?? 'Desconocida')
       : 'Todas las categorías';
 
   async function handleDelete() {
@@ -115,9 +106,6 @@ export function WarningRulesPage() {
 
   return (
     <>
-      {/* =====================================================
-          CABECERA
-      ====================================================== */}
       <PageHeader
         title="Reglas de aviso"
         description="Define avisos que se activan cuando un gasto supera un importe determinado para una categoría y moneda concretas."
@@ -149,9 +137,6 @@ export function WarningRulesPage() {
         </div>
       )}
 
-      {/* =====================================================
-          INFORMACIÓN SOBRE LOS LÍMITES
-      ====================================================== */}
       <div className="mb-4">
         <AlertBanner tone="info">
           Los límites se comparan con el
@@ -165,9 +150,7 @@ export function WarningRulesPage() {
         </AlertBanner>
       </div>
 
-      {/* =====================================================
-          LISTADO DE REGLAS
-      ====================================================== */}
+      {/* Listado de reglas */}
       <Card className="overflow-hidden rounded-2xl border border-black/[0.06] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
         {query.isPending && (
           <TableSkeleton columns={6} />
@@ -288,10 +271,6 @@ export function WarningRulesPage() {
                         </td>
 
                         <td className="px-4 py-4">
-                          {/*
-                           * El badge viene de un componente compartido,
-                           * por lo que no cambiamos aquí sus estados.
-                           */}
                           <SeverityBadge
                             severity={
                               rule.severity
@@ -357,9 +336,7 @@ export function WarningRulesPage() {
           )}
       </Card>
 
-      {/* =====================================================
-          CREAR REGLA
-      ====================================================== */}
+      {/* Crear regla */}
       <WarningRuleDialog
         open={isCreating}
         title="Nueva regla de aviso"
@@ -375,9 +352,7 @@ export function WarningRulesPage() {
         }}
       />
 
-      {/* =====================================================
-          EDITAR REGLA
-      ====================================================== */}
+      {/* Editar regla*/}
       <WarningRuleDialog
         key={editing?.id ?? 'edit'}
         open={editing !== null}
@@ -398,9 +373,7 @@ export function WarningRulesPage() {
         }}
       />
 
-      {/* =====================================================
-          ELIMINAR REGLA
-      ====================================================== */}
+      {/* Eliminar reglas */}
       <Modal
         open={pendingDelete !== null}
         onClose={() =>
@@ -458,9 +431,9 @@ function WarningRuleDialog({
     currency: CurrencyCode;
     thresholdMinor: string;
     severity:
-      | 'INFO'
-      | 'WARNING'
-      | 'BLOCKING';
+    | 'INFO'
+    | 'WARNING'
+    | 'BLOCKING';
     message: string;
     active: boolean;
   }) => Promise<void>;
@@ -495,9 +468,9 @@ function WarningRuleDialog({
       ) as CurrencyCode,
       thresholdDecimal: rule
         ? minorToDecimal(
-            rule.thresholdMinor,
-            rule.currency
-          )
+          rule.thresholdMinor,
+          rule.currency
+        )
         : '',
       severity:
         rule?.severity ?? 'WARNING',
