@@ -131,6 +131,7 @@ export function CategoriesPage() {
               setIsCreating(true)
             }
           >
+            <PlusIcon />
             Nueva categoría
           </Button>
         }
