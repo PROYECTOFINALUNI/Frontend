@@ -36,31 +36,41 @@ const ORDERING_OPTIONS: Array<{
   label: string;
   value: ExpenseOrdering;
 }> = [
-    {
-      label: 'Más recientes primero',
-      value: '-createdAt',
-    },
-    {
-      label: 'Más antiguos primero',
-      value: 'createdAt',
-    },
-    {
-      label: 'Fecha del gasto, más recientes',
-      value: '-expenseDate',
-    },
-    {
-      label: 'Fecha del gasto, más antiguos',
-      value: 'expenseDate',
-    },
-    {
-      label: 'Total, de mayor a menor',
-      value: '-total',
-    },
-    {
-      label: 'Total, de menor a mayor',
-      value: 'total',
-    },
-  ];
+  {
+    label: 'Más recientes primero',
+    value: '-createdAt',
+  },
+  {
+    label: 'Más antiguos primero',
+    value: 'createdAt',
+  },
+  {
+    label: 'Fecha del gasto, más recientes',
+    value: '-expenseDate',
+  },
+  {
+    label: 'Fecha del gasto, más antiguos',
+    value: 'expenseDate',
+  },
+  {
+    label: 'Total, de mayor a menor',
+    value: '-total',
+  },
+  {
+    label: 'Total, de menor a mayor',
+    value: 'total',
+  },
+];
+
+const EXPENSE_STATUS_LABELS: Partial<
+  Record<ExpenseStatus, string>
+> = {
+  DRAFT: 'Borrador',
+  SUBMITTED: 'Enviado',
+  APPROVED: 'Aprobado',
+  REJECTED: 'Rechazado',
+  PAID: 'Pagado',
+};
 
 export function ExpenseListPage() {
   const [filters, setFilters] =
@@ -223,10 +233,13 @@ export function ExpenseListPage() {
                     key={status}
                     value={status}
                   >
-                    {status.charAt(0) +
+                    {EXPENSE_STATUS_LABELS[
                       status
-                        .slice(1)
-                        .toLowerCase()}
+                    ] ??
+                      status.charAt(0) +
+                        status
+                          .slice(1)
+                          .toLowerCase()}
                   </option>
                 )
               )}
@@ -349,7 +362,7 @@ export function ExpenseListPage() {
           </div>
         </div>
 
-        {/* FILTROS QUE SOLO AFECTAN A LA PÁGINA ACTUAL */}
+        {/* Filtros que solo afectan a la pag actual */}
         <fieldset className="grid gap-3 border-b border-black/[0.06] bg-[#f7f8fa] px-5 py-4 sm:grid-cols-2 lg:grid-cols-4">
           <legend className="px-1 text-xs font-medium text-[#8b95a5]">
             Filtros aplicados solo a esta
@@ -448,7 +461,9 @@ export function ExpenseListPage() {
               <div className="border-t border-black/[0.06] bg-[#fbfbfc]">
                 <Pagination
                   page={filters.page ?? 1}
-                  pageSize={filters.pageSize ?? 10}
+                  pageSize={
+                    filters.pageSize ?? 10
+                  }
                   count={query.data.count}
                   onPageChange={(page) =>
                     update({ page })
