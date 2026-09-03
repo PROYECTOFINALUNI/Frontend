@@ -32,7 +32,7 @@ import { useExpensePreview } from '../api';
 import { CalculationPreview, type LocalCalculation } from './CalculationPreview';
 import { ExpenseWarningsPanel, type DisplayWarning } from './ExpenseWarningsPanel';
 
-/** Common European VAT rates, in basis points. */
+
 const TAX_PRESETS = [
   { label: 'No tax (0%)', value: 0 },
   { label: 'Super-reduced (4%)', value: 400 },
@@ -42,13 +42,13 @@ const TAX_PRESETS = [
 
 const CUSTOM_RATE = 'custom';
 
-/** Indexing a record of errors widens `message` past `string`, so it is narrowed here. */
+
 function customFieldError(errors: FieldErrors<ExpenseFormValues>, fieldId: string) {
   const message = errors.customFields?.[fieldId]?.message;
   return typeof message === 'string' ? message : undefined;
 }
 
-/** A blank answer clears the field; an unticked checkbox is a real `false`. */
+
 function toCustomFieldWrite(
   field: CategoryField,
   values: ExpenseFormValues
@@ -98,8 +98,7 @@ export function ExpenseForm({
 
   const [categoryId, setCategoryId] = useState(defaults.categoryId);
 
-  // Only the active fields are asked for. A value stored against a field that has since
-  // been deactivated is left alone by the API and still shows on the expense.
+
   const customFields: CategoryField[] = useMemo(() => {
     const category = categoriesQuery.data?.find((item) => item.id === categoryId);
     return (category?.customFields ?? []).filter((field) => field.active);
@@ -179,16 +178,16 @@ export function ExpenseForm({
   // La previsualización del backend se retrasa ligeramente para evitar una petición por cada pulsación.
   const previewBody: ExpenseWrite | null = local
     ? {
-        reportId,
-        merchant: values.merchant.trim() || 'Preview',
-        expenseDate: values.expenseDate || todayIso(),
-        categoryId: values.categoryId || null,
-        currency: values.currency,
-        amountDecimal: values.amountDecimal,
-        tax: { rateBps: values.taxRateBps, included: values.taxIncluded },
-        // La previsualización solo calcula el gasto; los campos personalizados no afectan a avisos ni aprobaciones.
-        customFields: [],
-      }
+      reportId,
+      merchant: values.merchant.trim() || 'Preview',
+      expenseDate: values.expenseDate || todayIso(),
+      categoryId: values.categoryId || null,
+      currency: values.currency,
+      amountDecimal: values.amountDecimal,
+      tax: { rateBps: values.taxRateBps, included: values.taxIncluded },
+      // La previsualización solo calcula el gasto; los campos personalizados no afectan a avisos ni aprobaciones.
+      customFields: [],
+    }
     : null;
 
   const debouncedBody = useDebouncedValue(previewBody, 500);

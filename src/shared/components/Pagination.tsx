@@ -27,8 +27,8 @@ export function Pagination({
       className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 px-4 py-3"
     >
       <p className="text-sm text-slate-600" aria-live="polite">
-        Showing <span className="font-medium">{first}</span>–
-        <span className="font-medium">{last}</span> of <span className="font-medium">{count}</span>
+        Enseñando <span className="font-medium">{first}</span>–
+        <span className="font-medium">{last}</span> de <span className="font-medium">{count}</span>
       </p>
 
       <div className="flex items-center gap-2">
@@ -38,10 +38,10 @@ export function Pagination({
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1 || isFetching}
         >
-          Previous
+          Anterior
         </Button>
         <span className="text-sm text-slate-600">
-          Page {page} of {totalPages}
+          Página {page} de {totalPages}
         </span>
         <Button
           variant="secondary"
@@ -49,7 +49,7 @@ export function Pagination({
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages || isFetching}
         >
-          Next
+          Siguiente
         </Button>
       </div>
     </nav>
