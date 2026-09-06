@@ -6,6 +6,7 @@ import {
   SUPPORTED_CURRENCIES,
   isValidDecimalString,
 } from '@/shared/money/money';
+
 import type { CategoryField } from '@/shared/types/domain';
 
 const currencyEnum = z.enum(
@@ -16,8 +17,14 @@ const currencyEnum = z.enum(
 );
 
 export const loginSchema = z.object({
-  email: z.string().min(1, 'Email is required').email('Enter a valid email address'),
-  password: z.string().min(1, 'Password is required'),
+  email: z
+    .string()
+    .min(1, 'El correo electrónico es obligatorio')
+    .email('Introduce un correo electrónico válido'),
+
+  password: z
+    .string()
+    .min(1, 'La contraseña es obligatoria'),
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
@@ -26,31 +33,47 @@ export const reportSchema = z.object({
   title: z
     .string()
     .trim()
-    .min(1, 'Title is required')
-    .max(200, 'Title cannot exceed 200 characters'),
+    .min(1, 'El título es obligatorio')
+    .max(200, 'El título no puede superar los 200 caracteres'),
 });
 
 export type ReportFormValues = z.infer<typeof reportSchema>;
 
 /** Mirrors ExpenseFieldValue.value_number, a DecimalField with four decimal places. */
 const CUSTOM_NUMBER_PATTERN = /^-?\d+(\.\d{1,4})?$/;
+
 const CUSTOM_TEXT_MAX_LENGTH = 500;
 
 const expenseBaseSchema = z.object({
   merchant: z
     .string()
     .trim()
-    .min(1, 'Merchant is required')
-    .max(200, 'Merchant cannot exceed 200 characters'),
-  expenseDate: z.string().min(1, 'Expense date is required'),
+    .min(1, 'El comercio es obligatorio')
+    .max(200, 'El comercio no puede superar los 200 caracteres'),
+
+  expenseDate: z
+    .string()
+    .min(1, 'La fecha del gasto es obligatoria'),
+
   categoryId: z.string(),
+
   currency: currencyEnum,
-  amountDecimal: z.string().min(1, 'Amount is required'),
+
+  amountDecimal: z
+    .string()
+    .min(1, 'El importe es obligatorio'),
+
   taxRateBps: z
-    .number({ invalid_type_error: 'Tax rate is required' })
-    .int('Tax rate must be a whole number of basis points')
-    .min(0, 'Tax rate cannot be negative')
-    .max(MAX_TAX_RATE_BPS, 'Tax rate cannot exceed 100%'),
+    .number({
+      invalid_type_error: 'El tipo impositivo es obligatorio',
+    })
+    .int('El tipo impositivo debe ser un número entero de puntos básicos')
+    .min(0, 'El tipo impositivo no puede ser negativo')
+    .max(
+      MAX_TAX_RATE_BPS,
+      'El tipo impositivo no puede superar el 100%'
+    ),
+
   taxIncluded: z.boolean(),
 });
 
@@ -58,68 +81,115 @@ const expenseBaseSchema = z.object({
  */
 export function makeExpenseSchema(fields: CategoryField[]) {
   const shape: z.ZodRawShape = Object.fromEntries(
-    fields.map((field) => [field.id, field.fieldType === 'BOOLEAN' ? z.boolean() : z.string()])
+    fields.map((field) => [
+      field.id,
+      field.fieldType === 'BOOLEAN'
+        ? z.boolean()
+        : z.string(),
+    ])
   );
 
-  return expenseBaseSchema.extend({ customFields: z.object(shape) }).superRefine((values, ctx) => {
-    if (values.amountDecimal && !isValidDecimalString(values.amountDecimal, values.currency)) {
-      const digits = CURRENCY_MINOR_UNITS[values.currency];
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['amountDecimal'],
-        message:
-          digits === 0
-            ? `${values.currency} does not use decimal places`
-            : `Enter a positive amount with at most ${digits} decimal places for ${values.currency}`,
-      });
-    }
+  return expenseBaseSchema
+    .extend({
+      customFields: z.object(shape),
+    })
+    .superRefine((values, ctx) => {
+      if (
+        values.amountDecimal &&
+        !isValidDecimalString(
+          values.amountDecimal,
+          values.currency
+        )
+      ) {
+        const digits =
+          CURRENCY_MINOR_UNITS[values.currency];
 
-    for (const field of fields) {
-      const value = values.customFields[field.id];
-      if (typeof value !== 'string') continue;
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['amountDecimal'],
+          message:
+            digits === 0
+              ? `${values.currency} no utiliza decimales`
+              : `Introduce un importe positivo con un máximo de ${digits} decimales para ${values.currency}`,
+        });
+      }
 
-      const path = ['customFields', field.id];
-      const trimmed = value.trim();
-      if (!trimmed) {
-        if (field.required) {
+      for (const field of fields) {
+        const value =
+          values.customFields[field.id];
+
+        if (typeof value !== 'string') continue;
+
+        const path = [
+          'customFields',
+          field.id,
+        ];
+
+        const trimmed = value.trim();
+
+        if (!trimmed) {
+          if (field.required) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path,
+              message: `${field.name} es obligatorio`,
+            });
+          }
+
+          continue;
+        }
+
+        if (
+          field.fieldType === 'NUMBER' &&
+          !CUSTOM_NUMBER_PATTERN.test(trimmed)
+        ) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             path,
-            message: `${field.name} is required`,
+            message: `${field.name} debe ser un número con un máximo de 4 decimales`,
           });
         }
-        continue;
+
+        if (
+          field.fieldType === 'TEXT' &&
+          trimmed.length >
+            CUSTOM_TEXT_MAX_LENGTH
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path,
+            message: `${field.name} no puede superar los ${CUSTOM_TEXT_MAX_LENGTH} caracteres`,
+          });
+        }
       }
-      if (field.fieldType === 'NUMBER' && !CUSTOM_NUMBER_PATTERN.test(trimmed)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path,
-          message: `${field.name} must be a number with at most 4 decimal places`,
-        });
-      }
-      if (field.fieldType === 'TEXT' && trimmed.length > CUSTOM_TEXT_MAX_LENGTH) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path,
-          message: `${field.name} cannot exceed ${CUSTOM_TEXT_MAX_LENGTH} characters`,
-        });
-      }
-    }
-  });
+    });
 }
 
-export type ExpenseFormValues = z.infer<ReturnType<typeof makeExpenseSchema>>;
+export type ExpenseFormValues = z.infer<
+  ReturnType<typeof makeExpenseSchema>
+>;
 
 /** El `id` está vacío en los campos nuevos y se elimina antes de enviarlos a la API. */
 export const categoryFieldSchema = z.object({
   id: z.string(),
+
   name: z
     .string()
     .trim()
-    .min(1, 'Field name is required')
-    .max(100, 'Field name cannot exceed 100 characters'),
-  fieldType: z.enum(['TEXT', 'NUMBER', 'BOOLEAN']),
+    .min(1, 'El nombre del campo es obligatorio')
+    .max(
+      100,
+      'El nombre del campo no puede superar los 100 caracteres'
+    ),
+
+  fieldType: z.enum([
+    'TEXT',
+    'NUMBER',
+    'BOOLEAN',
+  ]),
+
   required: z.boolean(),
+
   active: z.boolean(),
 });
 
@@ -128,85 +198,162 @@ export const categorySchema = z
     code: z
       .string()
       .trim()
-      .min(1, 'Code is required')
-      .max(32, 'Code cannot exceed 32 characters')
-      .regex(/^[A-Za-z0-9_-]+$/, 'Use letters, numbers, hyphens, or underscores only'),
+      .min(1, 'El código es obligatorio')
+      .max(
+        32,
+        'El código no puede superar los 32 caracteres'
+      )
+      .regex(
+        /^[A-Za-z0-9_-]+$/,
+        'Utiliza únicamente letras, números, guiones o guiones bajos'
+      ),
+
     name: z
       .string()
       .trim()
-      .min(1, 'Name is required')
-      .max(100, 'Name cannot exceed 100 characters'),
+      .min(1, 'El nombre es obligatorio')
+      .max(
+        100,
+        'El nombre no puede superar los 100 caracteres'
+      ),
+
     active: z.boolean(),
-    customFields: z.array(categoryFieldSchema),
+
+    customFields: z.array(
+      categoryFieldSchema
+    ),
   })
   .superRefine((values, ctx) => {
-    const firstSeenAt = new Map<string, number>();
-    values.customFields.forEach((field, index) => {
-      const key = field.name.trim().toLowerCase();
-      if (!key) return;
-      if (firstSeenAt.has(key)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['customFields', index, 'name'],
-          message: 'Field names must be unique within a category',
-        });
-      } else {
-        firstSeenAt.set(key, index);
+    const firstSeenAt = new Map<
+      string,
+      number
+    >();
+
+    values.customFields.forEach(
+      (field, index) => {
+        const key = field.name
+          .trim()
+          .toLowerCase();
+
+        if (!key) return;
+
+        if (firstSeenAt.has(key)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [
+              'customFields',
+              index,
+              'name',
+            ],
+            message:
+              'Los nombres de los campos deben ser únicos dentro de una categoría',
+          });
+        } else {
+          firstSeenAt.set(key, index);
+        }
       }
-    });
+    );
   });
 
-export type CategoryFormValues = z.infer<typeof categorySchema>;
+export type CategoryFormValues =
+  z.infer<typeof categorySchema>;
 
 export const warningRuleSchema = z
   .object({
     name: z
       .string()
       .trim()
-      .min(1, 'Name is required')
-      .max(120, 'Name cannot exceed 120 characters'),
+      .min(1, 'El nombre es obligatorio')
+      .max(
+        120,
+        'El nombre no puede superar los 120 caracteres'
+      ),
+
     categoryId: z.string(),
+
     currency: currencyEnum,
-    thresholdDecimal: z.string().min(1, 'Threshold is required'),
-    severity: z.enum(['INFO', 'WARNING', 'BLOCKING']),
+
+    thresholdDecimal: z
+      .string()
+      .min(1, 'El límite es obligatorio'),
+
+    severity: z.enum([
+      'INFO',
+      'WARNING',
+      'BLOCKING',
+    ]),
+
     message: z
       .string()
       .trim()
-      .min(1, 'Message is required')
-      .max(255, 'Message cannot exceed 255 characters'),
+      .min(1, 'El mensaje es obligatorio')
+      .max(
+        255,
+        'El mensaje no puede superar los 255 caracteres'
+      ),
+
     active: z.boolean(),
   })
   .superRefine((values, ctx) => {
     if (!values.thresholdDecimal) return;
 
-    if (!isValidDecimalString(values.thresholdDecimal, values.currency)) {
-      const digits = CURRENCY_MINOR_UNITS[values.currency];
+    if (
+      !isValidDecimalString(
+        values.thresholdDecimal,
+        values.currency
+      )
+    ) {
+      const digits =
+        CURRENCY_MINOR_UNITS[values.currency];
+
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['thresholdDecimal'],
         message:
           digits === 0
-            ? `${values.currency} does not use decimal places`
-            : `Enter a threshold with at most ${digits} decimal places for ${values.currency}`,
+            ? `${values.currency} no utiliza decimales`
+            : `Introduce un límite con un máximo de ${digits} decimales para ${values.currency}`,
       });
     }
   });
 
-export type WarningRuleFormValues = z.infer<typeof warningRuleSchema>;
+export type WarningRuleFormValues =
+  z.infer<typeof warningRuleSchema>;
 
 export const orgAttributeSchema = z.object({
-  dimension: z.enum(['LOCATION', 'DEPARTMENT', 'POSITION']),
+  dimension: z.enum([
+    'LOCATION',
+    'DEPARTMENT',
+    'POSITION',
+  ]),
+
   code: z
     .string()
     .trim()
-    .min(1, 'Code is required')
-    .max(32, 'Code cannot exceed 32 characters')
-    .regex(/^[A-Za-z0-9_-]+$/, 'Use letters, numbers, hyphens, or underscores only'),
-  name: z.string().trim().min(1, 'Name is required').max(100, 'Name cannot exceed 100 characters'),
+    .min(1, 'El código es obligatorio')
+    .max(
+      32,
+      'El código no puede superar los 32 caracteres'
+    )
+    .regex(
+      /^[A-Za-z0-9_-]+$/,
+      'Utiliza únicamente letras, números, guiones o guiones bajos'
+    ),
+
+  name: z
+    .string()
+    .trim()
+    .min(1, 'El nombre es obligatorio')
+    .max(
+      100,
+      'El nombre no puede superar los 100 caracteres'
+    ),
+
   active: z.boolean(),
 });
 
-export type OrgAttributeFormValues = z.infer<typeof orgAttributeSchema>;
+export type OrgAttributeFormValues =
+  z.infer<typeof orgAttributeSchema>;
 
 /** Las opciones vacías representan "Cualquiera" y se envían como `null` a la API. */
 export const approvalRuleSchema = z
@@ -214,106 +361,221 @@ export const approvalRuleSchema = z
     name: z
       .string()
       .trim()
-      .min(1, 'Name is required')
-      .max(120, 'Name cannot exceed 120 characters'),
+      .min(1, 'El nombre es obligatorio')
+      .max(
+        120,
+        'El nombre no puede superar los 120 caracteres'
+      ),
+
     priority: z
-      .number({ invalid_type_error: 'Priority is required' })
-      .int('Priority must be a whole number')
-      .min(0, 'Priority cannot be negative')
-      .max(10000, 'Priority cannot exceed 10000'),
+      .number({
+        invalid_type_error:
+          'La prioridad es obligatoria',
+      })
+      .int(
+        'La prioridad debe ser un número entero'
+      )
+      .min(
+        0,
+        'La prioridad no puede ser negativa'
+      )
+      .max(
+        10000,
+        'La prioridad no puede superar 10000'
+      ),
+
     categoryId: z.string(),
+
     currency: currencyEnum,
-    thresholdDecimal: z.string().min(1, 'Threshold is required'),
+
+    thresholdDecimal: z
+      .string()
+      .min(1, 'El límite es obligatorio'),
+
     submitterLocationId: z.string(),
+
     submitterDepartmentId: z.string(),
+
     submitterPositionId: z.string(),
-    approverRole: z.union([z.enum(['APPROVER', 'ADMIN']), z.literal('')]),
+
+    approverRole: z.union([
+      z.enum(['APPROVER', 'ADMIN']),
+      z.literal(''),
+    ]),
+
     approverLocationId: z.string(),
+
     approverDepartmentId: z.string(),
+
     approverPositionId: z.string(),
+
     active: z.boolean(),
   })
   .superRefine((values, ctx) => {
     if (!values.thresholdDecimal) return;
 
-    if (!isValidDecimalString(values.thresholdDecimal, values.currency)) {
-      const digits = CURRENCY_MINOR_UNITS[values.currency];
+    if (
+      !isValidDecimalString(
+        values.thresholdDecimal,
+        values.currency
+      )
+    ) {
+      const digits =
+        CURRENCY_MINOR_UNITS[values.currency];
+
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['thresholdDecimal'],
         message:
           digits === 0
-            ? `${values.currency} does not use decimal places`
-            : `Enter a threshold with at most ${digits} decimal places for ${values.currency}`,
+            ? `${values.currency} no utiliza decimales`
+            : `Introduce un límite con un máximo de ${digits} decimales para ${values.currency}`,
       });
     }
   });
 
-export type ApprovalRuleFormValues = z.infer<typeof approvalRuleSchema>;
+export type ApprovalRuleFormValues =
+  z.infer<typeof approvalRuleSchema>;
 
 /** Django rechaza por defecto las contraseñas con menos de 8 caracteres. */
 const passwordField = z
   .string()
-  .min(8, 'Password must be at least 8 characters')
-  .max(128, 'Password cannot exceed 128 characters');
+  .min(
+    8,
+    'La contraseña debe tener al menos 8 caracteres'
+  )
+  .max(
+    128,
+    'La contraseña no puede superar los 128 caracteres'
+  );
 
 export const userCreateSchema = z.object({
-  email: z.string().trim().min(1, 'Email is required').email('Enter a valid email address'),
+  email: z
+    .string()
+    .trim()
+    .min(
+      1,
+      'El correo electrónico es obligatorio'
+    )
+    .email(
+      'Introduce un correo electrónico válido'
+    ),
+
   fullName: z
     .string()
     .trim()
-    .min(1, 'Full name is required')
-    .max(255, 'Full name cannot exceed 255 characters'),
-  role: z.enum(['EMPLOYEE', 'APPROVER', 'ADMIN']),
+    .min(
+      1,
+      'El nombre completo es obligatorio'
+    )
+    .max(
+      255,
+      'El nombre completo no puede superar los 255 caracteres'
+    ),
+
+  role: z.enum([
+    'EMPLOYEE',
+    'APPROVER',
+    'ADMIN',
+  ]),
+
   active: z.boolean(),
+
   password: passwordField,
+
   locationId: z.string(),
+
   departmentId: z.string(),
+
   positionId: z.string(),
 });
 
-export type UserCreateFormValues = z.infer<typeof userCreateSchema>;
+export type UserCreateFormValues =
+  z.infer<typeof userCreateSchema>;
 
 export const setPasswordSchema = z.object({
   password: passwordField,
 });
 
-export type SetPasswordFormValues = z.infer<typeof setPasswordSchema>;
+export type SetPasswordFormValues =
+  z.infer<typeof setPasswordSchema>;
 
 /** El backend requiere un comentario no vacío al rechazar. */
 export const rejectSchema = z.object({
   comment: z
     .string()
     .trim()
-    .min(1, 'A comment is required when rejecting a report')
-    .max(2000, 'Comment cannot exceed 2000 characters'),
+    .min(
+      1,
+      'Es obligatorio añadir un comentario al rechazar un informe'
+    )
+    .max(
+      2000,
+      'El comentario no puede superar los 2000 caracteres'
+    ),
 });
 
-export type RejectFormValues = z.infer<typeof rejectSchema>;
+export type RejectFormValues =
+  z.infer<typeof rejectSchema>;
 
 export const commentSchema = z.object({
   comment: z
     .string()
     .trim()
-    .min(1, 'Comment cannot be empty')
-    .max(2000, 'Comment cannot exceed 2000 characters'),
+    .min(
+      1,
+      'El comentario no puede estar vacío'
+    )
+    .max(
+      2000,
+      'El comentario no puede superar los 2000 caracteres'
+    ),
 });
 
-export type CommentFormValues = z.infer<typeof commentSchema>;
+export type CommentFormValues =
+  z.infer<typeof commentSchema>;
 
 export const approvalStepSchema = z.object({
-  approverId: z.string().min(1, 'Select an approver'),
+  approverId: z
+    .string()
+    .min(
+      1,
+      'Selecciona un aprobador'
+    ),
+
   stepOrder: z
-    .number({ invalid_type_error: 'Step order is required' })
-    .int('Step order must be a whole number')
-    .min(1, 'Step order starts at 1'),
+    .number({
+      invalid_type_error:
+        'El orden del paso es obligatorio',
+    })
+    .int(
+      'El orden del paso debe ser un número entero'
+    )
+    .min(
+      1,
+      'El orden de los pasos comienza en 1'
+    ),
 });
 
-export type ApprovalStepFormValues = z.infer<typeof approvalStepSchema>;
+export type ApprovalStepFormValues =
+  z.infer<typeof approvalStepSchema>;
 
 export const delegateSchema = z.object({
-  approverId: z.string().min(1, 'Select an approver'),
-  comment: z.string().trim().max(2000, 'Comment cannot exceed 2000 characters'),
+  approverId: z
+    .string()
+    .min(
+      1,
+      'Selecciona un aprobador'
+    ),
+
+  comment: z
+    .string()
+    .trim()
+    .max(
+      2000,
+      'El comentario no puede superar los 2000 caracteres'
+    ),
 });
 
-export type DelegateFormValues = z.infer<typeof delegateSchema>;
+export type DelegateFormValues =
+  z.infer<typeof delegateSchema>;

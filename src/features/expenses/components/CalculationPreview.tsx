@@ -32,7 +32,7 @@ export function CalculationPreview({
   if (source === 'none') {
     return (
       <div className="rounded-md bg-slate-50 px-3 py-4 text-sm text-slate-500 ring-1 ring-slate-200 ring-inset">
-        Enter a valid amount to see the tax and total preview.
+        Introduce un importe válido para ver la previsualización de los impuestos y el total.
       </div>
     );
   }
@@ -40,27 +40,27 @@ export function CalculationPreview({
   const rows: Array<{ label: string; node: React.ReactNode; strong?: boolean }> = backend
     ? [
         {
-          label: taxIncluded ? 'Gross amount entered' : 'Net amount entered',
+          label: taxIncluded ? 'Importe bruto introducido' : 'Importe neto introducido',
           node: <MoneyText value={backend.amount} />,
         },
-        { label: 'Net (excluding tax)', node: <MoneyText value={backend.netAmount} /> },
+        { label: 'Neto (sin impuestos)', node: <MoneyText value={backend.netAmount} /> },
         {
-          label: `Tax (${formatRateBps(backend.tax.rateBps)}, ${backend.tax.included ? 'included' : 'added on top'})`,
+          label: `Impuestos (${formatRateBps(backend.tax.rateBps)}, ${backend.tax.included ? 'incluidos' : 'añadidos al importe'})`,
           node: <span className="tabular whitespace-nowrap">{backend.tax.display}</span>,
         },
         { label: 'Total', node: <MoneyText value={backend.total} emphasis />, strong: true },
       ]
     : [
         {
-          label: taxIncluded ? 'Gross amount entered' : 'Net amount entered',
+          label: taxIncluded ? 'Importe bruto introducido' : 'Importe neto introducido',
           node: <MoneyMinorText minor={local!.amountMinor} currency={currency} />,
         },
         {
-          label: 'Net (excluding tax)',
+          label: 'Neto (sin impuestos)',
           node: <MoneyMinorText minor={local!.netMinor} currency={currency} />,
         },
         {
-          label: `Tax (${formatRateBps(rateBps)}, ${taxIncluded ? 'included' : 'added on top'})`,
+          label: `Tax (${formatRateBps(rateBps)}, ${taxIncluded ? 'incluidos' : 'añadidos al importe'})`,
           node: <MoneyMinorText minor={local!.taxMinor} currency={currency} />,
         },
         {
@@ -75,12 +75,12 @@ export function CalculationPreview({
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 px-3 py-2">
         <p className="text-sm font-semibold text-slate-800">
           {source === 'backend'
-            ? 'Preview total (checked by the server)'
-            : 'Preview total (local estimate)'}
+            ? 'Total estimado (comprobado por el servidor)'
+            : 'Total estimado (cálculo local)'}
         </p>
         {isFetchingBackend && (
           <span className="text-xs text-slate-500" role="status">
-            Checking with the server…
+            Comprobando con servidor…
           </span>
         )}
       </div>
@@ -101,8 +101,7 @@ export function CalculationPreview({
       </dl>
 
       <p className="border-t border-slate-200 px-3 py-2 text-xs text-slate-500">
-        These figures are a preview. The saved values are whatever the backend calculates and stores
-        when you save.
+        Estas cifras son una previsualización. Los valores guardados serán los que el backend calcule y almacene al guardar.
       </p>
     </div>
   );

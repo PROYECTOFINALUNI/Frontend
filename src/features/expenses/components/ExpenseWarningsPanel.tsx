@@ -10,12 +10,12 @@ export type DisplayWarning = {
 
 const SEVERITY_RANK: Record<WarningSeverity, number> = { BLOCKING: 0, WARNING: 1, INFO: 2 };
 
-/** Muestra los avisos en una región ARIA para anunciarlos sin cambiar el foco del usuario. */
+/** Muestra los avisos en una región ARIA para anunciarlos sin cambiar el foco del usuario */
 export function ExpenseWarningsPanel({
   warnings,
   isPreview = false,
   className,
-  emptyMessage = 'No warnings for this expense.',
+  emptyMessage = 'Sin aviso para este gasto.',
 }: {
   warnings: DisplayWarning[];
   isPreview?: boolean;
@@ -51,8 +51,7 @@ export function ExpenseWarningsPanel({
 
       {isPreview && sorted.length > 0 && (
         <p className="text-xs text-slate-500">
-          Preview only. The backend re-evaluates every rule when the expense is saved and again on
-          submission.
+          Solo previsualización. El backend vuelve a evaluar todas las reglas al guardar el gasto y de nuevo al enviar el informe.
         </p>
       )}
     </div>

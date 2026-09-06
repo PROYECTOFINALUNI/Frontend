@@ -30,8 +30,8 @@ export function ApprovalTimeline({ events }: { events: ApprovalEvent[] }) {
   if (events.length === 0) {
     return (
       <EmptyState
-        title="No activity yet"
-        description="Submitting the report will record the first audit event."
+        title="Sin actividad"
+        description="Al enviar el informe se registrará el primer evento de auditoría."
       />
     );
   }
